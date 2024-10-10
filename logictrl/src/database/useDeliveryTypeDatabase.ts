@@ -89,5 +89,25 @@ export function useDeliveryTypeDatabase() {
         }
     }
 
-    return { create, update }
+    // DELETE delivery_type
+    async function deleteDeliveryType(data: DeliveryTypeDatabase) {
+        const statment = await database.prepareAsync(`
+            DELETE FROM delivery_type
+            
+            WHERE id = $id
+        `)
+
+        try {
+            await statment.executeAsync({
+                $id: data.id
+            })
+            
+        } catch (error) {
+            throw error
+        } finally {
+            await statment.finalizeAsync()
+        }
+    }
+
+    return { create, update, deleteDeliveryType }
 }
