@@ -14,5 +14,47 @@ export type DeliveryTypeDatabase = {
 export function useDeliveryTypeDatabase() {
     const database = useSQLiteContext()
 
-    return {  }
+    // CREATE delivery_type
+    async function create(data: Omit<DeliveryTypeDatabase, "id">) {
+        const statment = await database.prepareAsync(`
+            INSERT INTO delivery_type (
+            type,
+            requires_paid,
+            requires_paid_method,
+            requires_received,
+            requires_received_method,
+            requires_pickup_location,
+            requires_delivery_location
+            )    
+
+            VALUES (
+            $type,
+            $requires_paid,
+            $requires_paid_method,
+            $requires_received,
+            $requires_received_method,
+            $requires_pickup_location,
+            $requires_delivery_location
+            )
+        `)
+
+        try {
+            await statment.executeAsync({
+                $type: data.type,
+                $requires_paid: data.requires_paid,
+                $requires_paid_method: data.requires_paid_method,
+                $requires_received: data.requires_received,
+                $requires_received_method: data.requires_received_method,
+                $requires_pickup_location: data.requires_pickup_location,
+                $requires_delivery_location: data.requires_delivery_location
+            })
+
+        } catch (error) {
+            throw error
+        } finally {
+            await statment.finalizeAsync()
+        }
+    }
+
+    return { create }
 }
