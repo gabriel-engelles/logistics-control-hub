@@ -25,4 +25,17 @@ export async function initializeDatabase(database: SQLiteDatabase) {
             method_type TEXT NOT NULL CHECK (method_type IN ('paid','received'))
         );
     `)
+
+    // INSERT OR IGNORE INTO payment_options
+    await database.execAsync(`
+        INSERT OR IGNORE INTO payment_options (method_name, method_type)
+        VALUES
+            ('mb', 'paid'),
+            ('cash', 'paid'),
+            ('paid_online', 'paid'),
+            
+            ('mb', 'received'),
+            ('cash', 'received'),
+            ('paid_online', 'received') 
+    `)
 }
