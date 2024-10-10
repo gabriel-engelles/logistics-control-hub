@@ -36,5 +36,28 @@ export function usePaymentOptionsDatabase() {
         }
     }
 
-    return { create }
+    // UPDATE payment_options
+    async function update(data: PaymentOptionsDatabase) {
+        const statment = await database.prepareAsync(`
+            UPDATE payment_options SET
+            method_name = $method_name,
+            method_type = $method_type
+            
+            WHERE id = $id
+        `)
+        
+        try {
+            await statment.executeAsync({
+                $method_name: data.method_name,
+                $method_type: data.method_type
+            })
+
+        } catch (error) {
+            throw error
+        } finally {
+            await statment.finalizeAsync()
+        }
+    }
+
+    return { create, update }
 }
