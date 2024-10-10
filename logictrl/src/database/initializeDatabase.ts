@@ -16,4 +16,13 @@ export async function initializeDatabase(database: SQLiteDatabase) {
             requires_delivery_location BOOLEAN
         );
     `)
+
+    // CREATE TABLE payment_options
+    await database.execAsync(`
+        CREATE TABLE IF NOT EXISTS payment_options (
+            id INTEGER PRIMARY KEY,
+            method_name TEXT NOT NULL UNIQUE,
+            method_type TEXT NOT NULL CHECK (method_type IN ('paid','received'))
+        );
+    `)
 }
