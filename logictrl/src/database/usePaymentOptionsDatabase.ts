@@ -59,5 +59,25 @@ export function usePaymentOptionsDatabase() {
         }
     }
 
-    return { create, update }
+    // DELETE payment_options
+    async function deletePaymentOptions(id: number) {
+        const statment = await database.prepareAsync(`
+            DELETE FROM payment_options
+        
+            WHERE id = $id
+        `)
+        
+        try {
+            await statment.executeAsync({
+                $id: id
+            })
+
+        } catch (error) {
+            throw error
+        } finally {
+            await statment.finalizeAsync()
+        }
+    }
+
+    return { create, update, deletePaymentOptions }
 }
