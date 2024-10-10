@@ -38,4 +38,23 @@ export async function initializeDatabase(database: SQLiteDatabase) {
             ('cash', 'received'),
             ('paid_online', 'received') 
     `)
+
+    // CREATE TABLE delivery
+    await database.execAsync(`
+        CREATE TABLE IF NOT EXISTS delivery (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            delivery_type_id INTEGER,
+            paid_method_id INTEGER,
+            received_method_id INTEGER,
+            value_paid REAL,
+            value_received REAL,
+            pickup_location TEXT,
+            delivery_location TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+            FOREIGN KEY (delivery_type_id) REFERENCES delivery_type(id),
+            FOREIGN KEY (paid_method_id) REFERENCES payment_method(id),
+            FOREIGN KEY (received_method_id) REFERENCES payment_method(id)
+        )
+    `)
 }
