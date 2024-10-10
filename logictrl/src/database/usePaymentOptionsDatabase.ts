@@ -9,6 +9,32 @@ export type PaymentOptionsDatabase = {
 export function usePaymentOptionsDatabase() {
     const database = useSQLiteContext()
 
+    // CREATE payment_options, method_type = 'paid' or 'received'
+    async function create(data: Omit<PaymentOptionsDatabase, "id">) {
+        const statment = await database.prepareAsync(`
+            INSERT INTO payment_options (
+            method_name,
+            method_type
+            )
 
-    return {  }
+            VALUES (
+            $method_name,
+            $method_type    
+            )
+        `)
+        
+        try {
+            await statment.executeAsync({
+                $method_name: data.method_name,
+                $method_type: data.method_type
+            })
+
+        } catch (error) {
+            throw error
+        } finally {
+            await statment.finalizeAsync()
+        }
+    }
+
+    return { create }
 }
