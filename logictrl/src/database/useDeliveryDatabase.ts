@@ -98,5 +98,25 @@ export function useDeliveryDatabase() {
         }
     }
 
-    return { create, update }
+    // DELETE delivery
+    async function deleteDelivery(id: number) {
+        const statment = await database.prepareAsync(`
+            DELETE FROM delivery
+        
+            WHERE id = $id
+        `)
+        
+        try {
+            await statment.executeAsync({
+                $id: id
+            })
+
+        } catch (error) {
+            throw error
+        } finally {
+            await statment.finalizeAsync()
+        }
+    }
+
+    return { create, update, deleteDelivery }
 }
