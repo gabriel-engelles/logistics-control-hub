@@ -8,6 +8,7 @@ export async function initializeDatabase(database: SQLiteDatabase) {
         CREATE TABLE IF NOT EXISTS delivery_type (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             type TEXT,
+            delivery_commission REAL,
             requires_paid BOOLEAN,
             requires_paid_method BOOLEAN,
             requires_received BOOLEAN,
