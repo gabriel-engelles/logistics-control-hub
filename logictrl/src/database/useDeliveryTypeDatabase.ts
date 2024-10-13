@@ -3,6 +3,7 @@ import { useSQLiteContext } from "expo-sqlite"
 export type DeliveryTypeDatabase = {
     id: number,
     type: string,
+    delivery_commission: number,
     requires_paid: boolean,
     requires_paid_method: boolean,
     requires_received: boolean,
@@ -19,6 +20,7 @@ export function useDeliveryTypeDatabase() {
         const statment = await database.prepareAsync(`
             INSERT INTO delivery_type (
             type,
+            delivery_commission,
             requires_paid,
             requires_paid_method,
             requires_received,
@@ -29,6 +31,7 @@ export function useDeliveryTypeDatabase() {
 
             VALUES (
             $type,
+            $delivery_commission,
             $requires_paid,
             $requires_paid_method,
             $requires_received,
@@ -41,6 +44,7 @@ export function useDeliveryTypeDatabase() {
         try {
             await statment.executeAsync({
                 $type: data.type,
+                $delivery_commission: data.delivery_commission,
                 $requires_paid: data.requires_paid,
                 $requires_paid_method: data.requires_paid_method,
                 $requires_received: data.requires_received,
@@ -61,6 +65,7 @@ export function useDeliveryTypeDatabase() {
         const statment = await database.prepareAsync(`
             UPDATE delivery_type SET
             type = $type,
+            delivery_commission = $delivery_commission,
             requires_paid = $requires_paid,
             requires_paid_method = $requires_paid_method,
             requires_received = $requires_received,
@@ -74,6 +79,7 @@ export function useDeliveryTypeDatabase() {
         try {
             await statment.executeAsync({
                 $type: data.type,
+                $delivery_commission: data.delivery_commission,
                 $requires_paid: data.requires_paid,
                 $requires_paid_method: data.requires_paid_method,
                 $requires_received: data.requires_received,
@@ -109,5 +115,19 @@ export function useDeliveryTypeDatabase() {
         }
     }
 
-    return { create, update, deleteDeliveryType }
+    async function searchByDeliveryType(searchDType: string) {
+        try {
+            const query = "SELECT * FROM delivery_type WHERE type LIKE ?"
+
+            const response = await database.getAllAsync<DeliveryTypeDatabase>(query, [`%${searchDType}%`])
+            
+            return response
+        } catch (error) {
+            throw error
+        }
+    }
+
+
+
+    return { create, update, deleteDeliveryType, searchByDeliveryType }
 }
