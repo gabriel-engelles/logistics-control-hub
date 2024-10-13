@@ -1,17 +1,28 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native'
 
-export default function PaymentDay() {
+import { ListDeliveryType } from '@/components/DeliveryType/DeliveryTypeList'
+
+export default function Profile() {
+
+
   return (
-    <View style={styles.view}>
+    <View style={styles.container}>
       <Text>
-        Profile
+        Comissão
       </Text>
+      <ListDeliveryType/>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  view: {
-    margin: "auto"
-  }
+  container: {
+    flex: 1,
+    padding: 5,
+    paddingTop: 300,
+    paddingBottom: 80,
+    gap: 10
+  },
+
+
 });
