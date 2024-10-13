@@ -1,4 +1,3 @@
-// ProfileForm.tsx
 import React, { useState } from 'react';
 import { View, Button, StyleSheet, Alert, Text } from 'react-native';
 import Checkbox from 'expo-checkbox';
